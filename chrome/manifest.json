@@ -1,6 +1,6 @@
 {
   "name": "PassHash",
-  "version": "1.0",
+  "version": "2.0",
 
   "description": "A simple way to generate unique secure passwords for every site you visit.",
   "icons": {
