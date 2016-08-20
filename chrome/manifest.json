@@ -1,6 +1,10 @@
 {
   "name": "PassHash",
-  "version": "2.0",
+  "version": "3.0",
+  "offline_enabled": true,
+  "short_name": "PassHash",
+
+  "manifest_version": 2,
 
   "description": "A simple way to generate unique secure passwords for every site you visit.",
   "icons": {
@@ -8,8 +12,12 @@
     "48": "images/icon48.png",
     "128": "images/icon128.png"
   },
+
   "browser_action": {
-    "default_icon": "images/icon19.png",
+    "default_icon": {
+      "19": "images/icon19.png",
+      "38": "images/icon38.png"
+    },
     "default_popup": "popup.html"
   },
   
@@ -17,9 +25,18 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
-	  "all_frames": true
+      "all_frames": true
     }
   ],
 
-  "permissions": ["contextMenus","<all_urls>","tabs"]
+  "permissions": ["<all_urls>","tabs"],
+
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+H",
+        "mac": "Command+Shift+H"
+      }
+    }
+  }
 }
