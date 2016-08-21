@@ -1,4 +1,5 @@
 var worker = null;
+var shouldClose = false;
 function getPassWithWorker(master, salt, cb) {
 	if (worker != null) {
 		worker.terminate();
@@ -9,14 +10,21 @@ function getPassWithWorker(master, salt, cb) {
 		worker.terminate();
 		worker = null;
 		cb(e.data);
+		if (shouldClose) {
+			window.close();
+		}
 	};
 	worker.postMessage({master: master, salt: salt});
 }
 
 // Page functionality.
 function update(e) {
+	shouldClose = false;
 	if (e && e.keyCode == 13) {
-		window.close();
+		shouldClose = true;
+		if (worker == null) {
+			window.close();
+		}
 		return;
 	}
 	$('#output').addClass('hide');
