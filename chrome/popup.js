@@ -14,7 +14,11 @@ function getPassWithWorker(master, salt, cb) {
 }
 
 // Page functionality.
-function update() {
+function update(e) {
+	if (e && e.keyCode == 13) {
+		window.close();
+		return;
+	}
 	$('#output').addClass('hide');
 	var pass = "";
 	if ($('#password').val().length < 3 || $('#salt').val().length < 1) {
