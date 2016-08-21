@@ -36,7 +36,6 @@ function update() {
 
 chrome.tabs.getSelected(null, function(tab) {
 	chrome.tabs.sendRequest(tab.id, {loading: true}, function (res) {
-		$('#password').focus();
 		if (res.autofill) {
 			$('#autofill').show();
 		}

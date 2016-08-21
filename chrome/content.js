@@ -1,17 +1,16 @@
-var lastFocus = null;
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 		if (request.loading) {
-			lastFocus = document.querySelector('input:focus');
-			if (lastFocus != null) {
+			if (document.activeElement.tagName == 'INPUT') {
 				sendResponse({autofill: true});
+			} else {
+				sendResponse({autofill: false});
 			}
 		} else {
-			if (lastFocus != null)
-				lastFocus.value = request.password;
-				
+			if (document.activeElement.tagName == 'INPUT')
+				document.activeElement.value = request.password;
+
 			sendResponse({});
 		}
-		
 	}
 );
