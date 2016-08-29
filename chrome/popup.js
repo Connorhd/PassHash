@@ -14,7 +14,25 @@ function getPassWithWorker(master, salt, cb) {
 			window.close();
 		}
 	};
-	worker.postMessage({master: master, salt: salt});
+	worker.postMessage({master: master, salt: salt, iterations: 1000});
+}
+
+var hueWorker = null;
+function setHue(master) {
+	if (hueWorker != null) {
+		hueWorker.terminate();
+		hueWorker = null;
+	}
+	hueWorker = new Worker('worker.js');
+	console.log('hi')
+	hueWorker.onmessage = function(e) {
+		console.log('bye')
+		hueWorker.terminate();
+		hueWorker = null;
+		rotate = e.data.split('').map(function (x) { return x.charCodeAt(0) }).reduce(function (a,b) { return a+b }) % 360;
+		$('img').first().css('-webkit-filter', 'hue-rotate('+rotate+'deg)');
+	};
+	hueWorker.postMessage({master: master, salt: 'hue', iterations: 1});
 }
 
 // Page functionality.
@@ -31,8 +49,10 @@ function update(e) {
 	var pass = "";
 	if ($('#password').val().length < 3 || $('#salt').val().length < 1) {
 		$('#output').text("Enter a master password and site key to generate your password.")
+		$('img').first().css('-webkit-filter', 'hue-rotate(0deg)');
 	} else {
-		getPassWithWorker($('#password').val(),$('#salt').val(), function (pass) {
+		setHue($('#password').val())
+		getPassWithWorker($('#password').val(), $('#salt').val(), function (pass) {
 			chrome.tabs.getSelected(null, function(tab) {
 				chrome.tabs.sendRequest(tab.id, {password: pass});
 			});

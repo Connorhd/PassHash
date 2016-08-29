@@ -43,8 +43,8 @@ function convert(src, srcAlphabet, dstAlphabet)
    return ret;
 }
 
-self.onmessage = function(e) {  
-	var hash = CryptoJS.PBKDF2(e.data.master, e.data.salt, { keySize: 256/32, iterations: 1000, hasher: CryptoJS.algo.SHA256 }).toString();
+self.onmessage = function(e) {
+	var hash = CryptoJS.PBKDF2(e.data.master, e.data.salt, { keySize: 256/32, iterations: e.data.iterations, hasher: CryptoJS.algo.SHA256 }).toString();
 	var fullpass = convert(hash,"0123456789abcdef","0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 	var pass = "";
 	var chars = 0;
